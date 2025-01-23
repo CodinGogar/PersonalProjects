@@ -1,2 +1,2 @@
 # PersonalProjects
-All projects ever embarked on 
+All projects ever embarked on. Some are still being worked on
