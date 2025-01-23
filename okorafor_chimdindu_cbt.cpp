@@ -1,0 +1,209 @@
+#include <iostream>// for inputs
+#include <string>// for strings
+#include <algorithm>//for  begin and end
+#include <cctype>//for tolower fn
+#include <stdlib.h>//for the  exit fn
+#include <vector>// for vectors
+using namespace std;
+
+
+// global  variables and arrays
+int score = 0; 
+string arr[5] = {"(1)WHAT IS 2+2","(2)WHAT IS 2+5","(3)WHAT IS 2+11","(4)WHAT IS 2+8","(5)WHAT IS 2+1"};
+string options[5]  = {"A = 3,  B = 4,  C = 5,  D = 6,  E = 1\n",
+                          "A = 4,  B = 7,  C = 54,  D = 1,  E = 12\n",
+								  "A = 32,  B = 56,  C = 11,  D = 4,  E = 13\n",
+								  "A = 10,  B = 4,  C = 53,  D = 63,  E = 9\n",
+								  "A = 3,  B = 4,  C = 5,  D = 0,  E = 1\n"	 		 	  		  	 	  	 		 	  };
+	
+string correct[5] = {"B","A","B", "C","E"};
+vector <int> skipped_questions;
+vector <string> user_options;
+
+// fn to change user inputs to lower case 
+void lower_input (string a){
+	transform(a.begin(), a.end(), a.begin(), ::tolower);
+}
+
+// fn to verify users access
+int authenticator(){
+	string usernames[3] = {"chimdindu.okorafor@pau.edu.ng","fred.john@pau.edu.ng","basil.yama@pau.edu.ng"};
+	string password_list[3] = {"1234adsr","1234fred","1234basil"};
+	
+	start:
+		
+	string user_username, password;
+	cout << "\nENTER YOUR USERNAME"<<endl;
+	cin >> user_username;
+	lower_input(user_username);
+	
+	cout << "ENTER YOUR PASSWORD"<<endl;
+	cin >> password;
+	lower_input(password);
+	
+	for (int i = 0; i<=2; i++){
+		if (usernames[i] == user_username &&  password_list[i] == password){
+				cout<<"WELCOME";
+			 return 2; 	  
+		}
+	   else{
+	 	 		cout << "WRONG LOGIN DETAILS";
+				goto start;	 
+		 }
+	}
+	
+	
+	return 1;
+}
+
+// fn to display the rules
+void rules(){
+   
+	cout << "\nUSER MANUAL"<<endl;
+	cout <<"CHOOSE THE DESIRED OPTION LETTER FROM YOUR KEYBOARD"<<endl;
+	cout <<"PRESS S TO SKIP TO THE NEXT QUESTION"<<endl;
+	cout <<"PRESS O TO SUBMIT AND  FINISH"<<endl;
+	cout <<"PRESS P TO GO BACK TO  THE PREVIOUS QUESTION"<<endl;
+	
+}
+
+// fn to print out the users script
+void script_printer(){
+         begin:
+         string response;
+         int undone = end(skipped_questions)-begin(skipped_questions);
+         cout << "ARE  YOU SURE YOU WANT TO VIEW YOUR SCRIPT, THERE ARE "<<undone<< "  QUESTIONS YOU HAVENT ANSWERD  Y/N'" ;
+         cin >> response;
+         lower_input(response);
+	      if (response == "y"){
+			   cout <<" SCORE = "<< score <<" / 5"<<endl;
+			   cout << "YOUR  SCRIPT\n";  
+			   
+				cout << "----------------------------------------------------------------------------------------------------------------------"<<endl;
+				cout << "----------------------------------------------------------------------------------------------------------------------"<<endl;
+								 	        
+            for (int i = 0; i<5; i++){
+			   
+  			 			 cout << arr[i] << endl;
+  						 cout << options[i] << endl;
+						 cout << "YOUR ANSWER-->" << user_options[i]<<endl;			
+						 cout << "THE RIGHT ANSWER-->" << correct[i]<<endl;											
+				} 									
+			}
+			else if (response =="n"){
+             cout << "OKAY, GOODLUCK";
+			}	
+		   else {
+				     	cout << "INVALID INPUT";
+  					 goto begin; 
+			}
+	 	}
+
+
+int main(){
+	      cout << "---------------------------------------CBT GAME--------------------------------------------"<<endl;
+	      int proceed;
+         cout << "PRESS 1 TO PROCEED OR  2 TO EXIT THE PROGRAM" << endl;
+         cin >> proceed;
+       
+	 	   if (proceed == 1)  {
+			 	  int pass = authenticator();
+         	  if (pass == 2){
+			
+         
+         	  rules();
+  			
+			 
+			   // print out the questions and collect the users answer
+	 			for (int i = 0; i<5; ){
+			   
+  			 		 cout << arr[i] << endl;
+  					 cout << options[i] << endl;
+  					 string user_pick;
+					 cout << "YOUR ANSWER";
+					 cin >> user_pick;
+					 lower_input(user_pick);	   
+				 			 
+				 
+				
+				if (user_pick == correct[i]){	
+					i++;
+				   ++score;
+				   user_options.push_back(user_pick);    
+						
+				}
+				else if (user_pick == "s"&& i!=4)	{
+					i++;	 	
+ 	 		    skipped_questions.push_back(i);
+				}
+				else if (user_pick ==  "p"&& i>0){
+					 i--;	 	
+				}	
+			   
+				else if (user_pick ==  "o"){
+ 				string user_choice;	 	
+					  cout <<"THANKS FOR PLAYING. SCORE = "<< score <<" / 5"<<endl;
+					  cout << "DO YOU WANT TO VIEW YOUR SCRIPT  Y/N";	  
+					  cin >> user_choice;
+					  lower_input(user_choice); 
+		  		  
+				 if (user_choice == "y" ) {
+				 	 script_printer();   	
+				 }  
+				 else if(user_choice == "n"){
+				    	cout <<"BYE! THANKS FOR PLAYING. SCORE = "<< score <<" / 5"<<endl;
+						exit(0);  			
+				 } 			 
+		       else{
+				 		cout << "INVALID INPUT";
+						 goto loop;	
+				 }				 	
+					 	 	
+				}	    
+						 				 	  		      
+				else if (user_pick == "a"||user_pick == "b"||user_pick == "c"||user_pick == "d"||user_pick == "e"){
+					 	  				 	
+					  user_options.push_back(user_pick);	 	
+					  i++;																	 	 					   
+				} 
+				else{
+					 cout << "invalid  input"<< endl;
+					  
+					 	
+				}	 					 
+		  }
+		  	  cout <<"THANKS FOR PLAYING. SCORE = "<< score <<" / 5"<<endl;
+			  loop:   
+	        string user_choice1;
+		  	  cout << "DO YOU WANT TO VIEW YOUR SCRIPT  Y/N";
+		  	  cin >> user_choice1;
+		  	  lower_input(user_choice1);
+				 if (user_choice1 == "y" ) {
+				 	 script_printer();   	
+				 }  
+				 else if(user_choice1 == "n"){
+				    	cout <<"BYE!THANKS FOR PLAYING. SCORE = "<< score <<" / 5"<<endl;
+				 } 			 
+		       else{
+				 		cout << "INVALID INPUT";
+						 goto loop;	
+				 }
+		  
+		  	}
+	   	   	
+			 }
+		 else if (proceed == 2) {
+		 		 	exit(0);
+		 }
+		   else{
+    	       cout << "WRONGCHARACTER ENTERD";
+			}
+         
+ 		 
+			   
+				  
+	
+	
+	
+
+}
